@@ -91,3 +91,4 @@ Rails.application.configure do
   ]
 
   # Skip DNS rebinding protect
+end
