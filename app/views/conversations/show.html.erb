@@ -1,33 +1,41 @@
-<!-- app/views/conversations/show.html.erb -->
-<div class="max-w-4xl mx-auto h-screen flex flex-col border border-[#ffd369] rounded-lg">
+<div class="max-w-4xl mx-auto h-screen flex flex-col">
   <% interlocutor = @conversation.interlocutor(current_user) %>
 
   <!-- Шапка чата -->
-  <div class="bg-[#31363f] rounded-t-lg shadow-md p-4 border-b border-[#ffd369]">
+  <div class="bg-[#31363f] rounded-t-lg shadow-md p-3 sm:p-4 border-b border-[#ffd369]">
     <div class="flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <%= link_to conversations_path, class: "text-[#ffd369] hover:text-[#ffd369]/80" do %>
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div class="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+        <%= link_to conversations_path, class: "text-[#ffd369] hover:text-[#ffd369]/80 flex-shrink-0" do %>
+          <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
           </svg>
         <% end %>
 
-        <div class="w-10 h-10 bg-gray-300 rounded-full"></div>
-        <div>
-          <h2 class="font-semibold text-lg text-[#ffd369]"><%= interlocutor.email %></h2>
+        <div class="w-8 h-8 sm:w-10 sm:h-10 bg-[#ffd369] rounded-full flex items-center justify-center flex-shrink-0">
+          <span class="text-[#222831] text-sm sm:text-base font-bold">
+            <%= interlocutor.email&.first&.upcase %>
+          </span>
+        </div>
+
+        <div class="min-w-0 flex-1">
+          <h2 class="font-semibold text-base sm:text-lg text-[#ffd369] truncate">
+            <%= interlocutor.email %>
+          </h2>
           <p class="text-xs text-gray-500">онлайн</p>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="bg-[#222831]  flex-1 overflow-y-auto p-4" id="messages">
+  <!-- Область сообщений -->
+  <div class="bg-[#222831] flex-1 overflow-y-auto p-3 sm:p-4" id="messages">
     <% @messages.each do |message| %>
       <%= render 'messages/message', message: message, current_user_id: current_user.id %>
     <% end %>
   </div>
 
-  <div class="bg-[#222831] rounded-b-lg shadow-md p-4">
+  <!-- Форма отправки -->
+  <div class="bg-[#222831] rounded-b-lg shadow-md p-3 sm:p-4">
     <%= form_with(
           model: [@conversation, @message],
           url: conversation_messages_path(@conversation),
@@ -39,12 +47,12 @@
             rows: 1,
             id: "message-input",
             placeholder: "Написать сообщение...",
-            class: "flex-1 border border-[#ffd369] text-[#ffd369] rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none",
+            class: "flex-1 border border-[#ffd369] bg-[#31363f] text-[#ffd369] rounded-lg px-3 py-2 sm:px-4 sm:py-2 focus:outline-none focus:ring-2 focus:ring-[#ffd369] resize-none text-sm sm:text-base",
             required: true %>
 
         <%= f.submit "Отправить",
             id: "message-submit",
-            class: "bg-[#ffd369] hover:bg-[#ffd369]/80 text-[#222831] px-6 py-2 rounded-lg cursor-pointer" %>
+            class: "bg-[#ffd369] hover:bg-[#ffd369]/80 text-[#222831] px-3 py-2 sm:px-6 sm:py-2 rounded-lg cursor-pointer text-sm sm:text-base whitespace-nowrap font-medium" %>
       </div>
     <% end %>
   </div>
@@ -100,8 +108,8 @@
 
             const senderName = messageElement.querySelector(".sender-name")
             if (senderName) {
-            senderName.classList.add("text-[#ffd369]")
-            senderName.remove()
+              senderName.classList.add("text-[#ffd369]")
+              senderName.remove()
             }
           }
 
@@ -134,7 +142,6 @@
       })
 
       if (response.ok) {
-
         input.value = ''
         input.style.height = 'auto'
       } else {
@@ -152,7 +159,6 @@
     input.style.height = 'auto'
     input.style.height = input.scrollHeight + 'px'
   })
-
 
   const messagesContainer = document.getElementById('messages')
   if (messagesContainer) {

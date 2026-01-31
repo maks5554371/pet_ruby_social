@@ -1,66 +1,75 @@
-<!-- app/views/conversations/index.html.erb -->
-<div class=" mx-auto p-4 flex flex-row h-screen border">
-<div class="absolute top-20 left-20 ">
- <%= render(HeaderComponent.new(current_user: current_user)) %>
-</div>
-  <div class="bg-[#31363f] border border-[#ffd369] rounded-lg shadow-md max-w-2xl mx-auto flex-1 flex flex-col">
-    <!-- Шапка -->
-    <div class="border-b border-[#ffd369] p-4">
-      <h1 class="text-2xl font-bold text-[#ffd369]">Сообщения</h1>
-    </div>
+<div class="min-h-screen bg-[#222831]">
+  <!-- Header - скрываем на мобильных -->
+  <div class="hidden lg:block absolute top-20 left-20">
+    <%= render(HeaderComponent.new(current_user: current_user)) %>
+  </div>
 
+  <!-- Мобильный header -->
+  <div class="lg:hidden fixed top-0 left-0 right-0 z-50">
+    <%= render(HeaderComponent.new(current_user: current_user)) %>
+  </div>
 
-    <!-- Список бесед -->
-    <div class="divide-y divide-[#ffd369] overflow-y-auto flex-1 rounded-b-lg">
-      <% if @conversations.any? %>
-        <% @conversations.each do |conversation| %>
-          <% interlocutor = conversation.interlocutor(current_user) %>
-          <% last_message = conversation.last_message %>
+  <!-- Основной контент -->
+  <div class="max-w-4xl mx-auto px-3 sm:px-4 py-4 sm:py-8 pt-20 lg:pt-8">
+    <div class="bg-[#31363f] border border-[#ffd369] rounded-lg shadow-md flex flex-col min-h-[calc(100vh-8rem)] lg:min-h-[calc(100vh-4rem)]">
 
-          <%= link_to conversation_path(conversation), class: "block p-4 hover:bg-[#ffd369]/20 transition" do %>
-            <div class="flex items-center gap-4">
-              <!-- Аватар -->
-              <div class="w-12 h-12 bg-gray-300 rounded-full flex-shrink-0"></div>
+      <!-- Заголовок -->
+      <div class="border-b border-[#ffd369] p-3 sm:p-4 flex-shrink-0">
+        <h1 class="text-xl sm:text-2xl font-bold text-[#ffd369]">Сообщения</h1>
+      </div>
 
-              <div class="flex-1 min-w-0">
-                <!-- Имя собеседника -->
-                <div class="flex justify-between items-baseline">
-                  <h3 class="font-semibold text-lg truncate text-[#ffd369]">
-                    <%= interlocutor.email %>
-                  </h3>
+      <!-- Список бесед -->
+      <div class="flex-1 overflow-y-auto">
+        <% if @conversations.any? %>
+          <% @conversations.each do |conversation| %>
+            <% interlocutor = conversation.interlocutor(current_user) %>
+            <% last_message = conversation.last_message %>
 
-                  <!-- Время последнего сообщения -->
-                  <% if last_message %>
-                    <span class="text-xs text-gray-500 ml-2">
-                      <%= time_ago_in_words(last_message.created_at) %> назад
-                    </span>
-                  <% end %>
+            <%= link_to conversation_path(conversation),
+                  class: "block p-3 sm:p-4 hover:bg-[#ffd369]/20 transition border-b border-[#ffd369]/20 last:border-b-0" do %>
+              <div class="flex items-center gap-3 sm:gap-4">
+                <!-- Аватар -->
+                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-[#ffd369] rounded-full flex-shrink-0 flex items-center justify-center">
+                  <span class="text-[#222831] text-base sm:text-lg font-bold">
+                    <%= interlocutor.email&.first&.upcase %>
+                  </span>
                 </div>
 
-                <!-- Превью последнего сообщения -->
-                <% if last_message %>
-                  <p class="text-gray-600 text-sm truncate mt-1">
-                    <% if last_message.user == current_user %>
-                      <span class="text-gray-400">Вы: </span>
+                <!-- Информация о беседе -->
+                <div class="flex-1 min-w-0">
+                  <div class="flex justify-between items-baseline gap-2">
+                    <h3 class="font-semibold text-base sm:text-lg truncate text-[#ffd369]">
+                      <%= interlocutor.email %>
+                    </h3>
+
+                    <% if last_message %>
+                      <span class="text-xs text-gray-500 flex-shrink-0">
+                        <%= time_ago_in_words(last_message.created_at) %> назад
+                      </span>
                     <% end %>
-                    <%= last_message.body %>
-                  </p>
-                <% else %>
-                  <p class="text-gray-400 text-sm italic">Нет сообщений</p>
-                <% end %>
+                  </div>
+
+                  <% if last_message %>
+                    <p class="text-gray-400 text-xs sm:text-sm truncate mt-1">
+                      <% if last_message.user == current_user %>
+                        <span class="text-gray-500">Вы: </span>
+                      <% end %>
+                      <%= last_message.body %>
+                    </p>
+                  <% else %>
+                    <p class="text-gray-400 text-xs sm:text-sm italic">Нет сообщений</p>
+                  <% end %>
+                </div>
               </div>
-
-
-            </div>
+            <% end %>
           <% end %>
+        <% else %>
+          <div class="p-6 sm:p-8 text-center text-gray-500">
+            <p class="text-base sm:text-lg mb-2 text-[#ffd369]">У вас пока нет бесед</p>
+            <p class="text-sm text-gray-400">Начните общение, перейдя в профиль пользователя</p>
+          </div>
         <% end %>
-      <% else %>
-        <!-- Пустое состояние -->
-        <div class="p-8 text-center text-gray-500">
-          <p class="text-lg mb-2">У вас пока нет бесед</p>
-          <p class="text-sm">Начните общение, перейдя в профиль пользователя</p>
-        </div>
-      <% end %>
+      </div>
     </div>
   </div>
 </div>

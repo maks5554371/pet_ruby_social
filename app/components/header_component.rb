@@ -13,5 +13,3 @@ class HeaderComponent < ViewComponent::Base
     end
   end
 end
-# bg-[#ffd369] text-[#222831] px-6 py-2 rounded hover:bg-[#ffd369]/50" %>
-#           <% end %>
