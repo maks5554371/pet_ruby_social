@@ -1,0 +1,79 @@
+<div class="bg-[#222831] min-h-screen">
+<div class="absolute top-20 left-20 ">
+  <%= render(HeaderComponent.new(current_user: current_user)) %>
+</div>
+  <div class="max-w-4xl mx-auto px-4 py-8">
+    <!-- Шапка профиля -->
+    <div class="bg-[#31363f] rounded-lg shadow-md p-6 border border-[#ffd369]">
+      <div class="flex items-start justify-between">
+        <div class="flex items-center">
+          <!-- Аватар -->
+          <div class="w-24 h-24 bg-[#ffd369] rounded-full flex items-center justify-center mr-6">
+            <span class="text-[#222831] text-4xl font-bold">
+              <%= @user.email&.first&.upcase %>
+            </span>
+          </div>
+
+          <!-- Инфо -->
+          <div>
+            <h1 class="text-3xl font-bold mb-2 text-[#ffd369]"><%= @user.email %></h1>
+            <div class="flex space-x-6 text-sm">
+              <div>
+                <span class="font-semibold text-[#ffd369]">
+                <%=
+                  if @posts.count == 0
+                    posts_text = "#{@posts.count} постов"
+                  elsif @posts.count == 1
+                    posts_text = "#{@posts.count} пост"
+                  elsif (2..4).include?(@posts.count)
+                    posts_text = "#{@posts.count} поста"
+                  else
+                    posts_text = "#{@posts.count} постов"
+                  end
+                 %>
+                  </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Кнопки (показываем только на своем профиле) -->
+        <% if @is_own_profile %>
+          <div class="flex space-x-2">
+            <%= link_to "Редактировать", edit_user_registration_path, class: "px-4 py-2 bg-[#ffd369] rounded-lg hover:bg-[#ffd369]/80 transition" %>
+            <%= button_to "Выйти", destroy_user_session_path, method: :delete, class: "px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition" %>
+          </div>
+        <% else %>
+          <div class="flex space-x-2">
+            <%= button_to "Написать сообщение",
+                  conversations_path(recipient_id: @user.id),
+                  method: :post,
+                  class: "px-4 py-2 bg-[#ffd369] rounded-lg hover:bg-[#ffd369]/80 transition cursor-pointer" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="space-y-4 mt-6">
+      <% if @posts.any? %>
+        <% @posts.each do |post| %>
+          <%= render(PostCardComponent.new(post: post, current_user: current_user)) %>
+        <% end %>
+      <% else %>
+        <div class="bg-[#31363f] p-12 rounded-lg shadow-md text-center border border-[#ffd369]">
+          <p class="text-[#ffd369] text-lg mb-4">
+            <% if @is_own_profile %>
+              У вас пока нет постов 😔
+            <% else %>
+              У <%= @user.email %> пока нет постов
+            <% end %>
+          </p>
+
+          <% if @is_own_profile %>
+            <%= link_to "Создать первый пост", new_post_path, class: "inline-block bg-[#ffd369] text-[#222831] px-6 py-3 rounded-lg hover:bg-[#ffd369]/80 transition" %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

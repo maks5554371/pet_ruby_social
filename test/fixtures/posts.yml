@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  content: MyText
+  views_count: 1
+  shares_count: 1
+
+two:
+  user: two
+  content: MyText
+  views_count: 1
+  shares_count: 1

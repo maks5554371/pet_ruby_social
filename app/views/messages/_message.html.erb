@@ -1,0 +1,30 @@
+<!-- app/views/messages/_message.html.erb -->
+<%
+  # Получаем ID текущего пользователя из локальной переменной
+  # Если не передан - значит это WebSocket рендеринг
+  current_user_id = local_assigns[:current_user_id]
+
+  # Определяем моё ли сообщение
+  is_mine = current_user_id && (message.user_id == current_user_id)
+%>
+
+<div class="message-item flex <%= is_mine ? 'justify-end' : 'justify-start' %> mb-4"
+     data-message-id="<%= message.id %>"
+     data-sender-id="<%= message.user_id %>">
+  <div class="max-w-xs lg:max-w-md">
+
+    <% unless is_mine %>
+      <p class="sender-name text-xs text-[#ffd369] mb-1 px-2">
+        <%= message.user.email %>
+      </p>
+    <% end %>
+
+    <div class="message-bubble <%= is_mine ? 'bg-[#393e46] text-[#ffd369]' : 'bg-[#ffd369] text-[#393e46]' %> rounded-lg px-4 py-2 shadow">
+      <p class="break-words"><%= message.body %></p>
+
+      <p class="text-xs message-time <%= is_mine ? 'text-blue-100' : 'text-gray-500' %> mt-1">
+        <%= message.created_at.strftime("%H:%M") %>
+      </p>
+    </div>
+  </div>
+</div>

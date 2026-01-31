@@ -1,0 +1,28 @@
+
+
+<div class="bg-[#222831] min-h-screen max-w-7xl mx-auto">
+<div class="absolute top-20 left-20 ">
+ <%= render(HeaderComponent.new(current_user: current_user)) %>
+</div>
+<div>
+  <div class="max-w-2xl mx-auto px-4 py-8">
+  <div class="flex flex-row justify-between items-center pb-6">
+    <h1 class="text-3xl text-white font-bold">Лента постов</h1>
+      <% if current_user %>
+            <%= link_to "Создать пост", new_post_path, class: " bg-[#ffd369] text-[#222831] px-6 py-2 rounded hover:bg-[#ffd369]/50" %>
+          <% end %>
+</div>
+    <div class="space-y-4  rounded-lg shadow-md">
+      <% if @posts.any? %>
+        <% @posts.each do |post| %>
+          <%= render(PostCardComponent.new(post: post, current_user: current_user)) %>
+        <% end %>
+      <% else %>
+        <div class="text-center text-gray-500 py-12">
+          <p>Пока нет постов</p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+</div>

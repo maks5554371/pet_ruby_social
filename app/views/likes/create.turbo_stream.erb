@@ -1,0 +1,8 @@
+<%= turbo_stream.replace "post_#{@post.id}_likes" do %>
+  <%= turbo_frame_tag "post_#{@post.id}_likes" do %>
+    <%= button_to post_like_path(@post), method: :delete, class: "text-red-500 cursor-pointer inline-flex items-center gap-2" do %>
+      <%= heroicon "heart", variant: :solid, options: { class: "w-6 h-6" } %>
+      <span><%= @post.likes.count %></span>
+    <% end %>
+  <% end %>
+<% end %>

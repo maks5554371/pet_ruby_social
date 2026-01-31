@@ -1,0 +1,6 @@
+<%= turbo_stream.remove "comment_#{@comment.id}" %>
+<%= turbo_stream.replace "comments_header_#{@post.id}" do %>
+  <h2 id="comments_header_<%= @post.id %>" class="text-xl font-bold mb-4">
+    Комментарии (<%= @post.comments.count %>)
+  </h2>
+<% end %>
