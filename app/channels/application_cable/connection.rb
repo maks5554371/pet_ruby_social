@@ -4,9 +4,9 @@ module ApplicationCable
 
     def connect
       self.current_user = find_verified_user
-      Rails.logger.info "✅ WebSocket connected for user: #{current_user.id}"
+      Rails.logger.info "скажи что вебсокеты работаю #{current_user.id}"
     rescue => e
-      Rails.logger.error "❌ WebSocket connection failed: #{e.message}"
+      Rails.logger.error "не скажу#{e.message}"
       reject_unauthorized_connection
     end
 
@@ -17,7 +17,7 @@ module ApplicationCable
       if env['warden']&.user
         env['warden'].user
       else
-        Rails.logger.error "❌ No warden user found"
+        Rails.logger.error "варден юзера опять не нашел"
         reject_unauthorized_connection
       end
     end
